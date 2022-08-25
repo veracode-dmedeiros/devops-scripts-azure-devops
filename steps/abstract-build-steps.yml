@@ -1,0 +1,26 @@
+# File: abstract-build-steps.yml
+
+parameters:
+- name: solution
+  type: string
+  default: '**/*.sln'
+- name: buildPlatform
+  type: string
+  default: 'Any CPU'
+- name: buildConfiguration
+  type: string
+  default: 'Debug'
+
+steps:
+    - task: NuGetToolInstaller@1
+  
+    - task: NuGetCommand@2
+      inputs:
+          restoreSolution: ${{ parameters.solution }}
+
+    - task: VSBuild@1
+      inputs:
+           solution: ${{ parameters.solution }}
+           msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+           platform: ${{ parameters.buildPlatform }}
+           configuration: ${{ parameters.buildConfiguration }}
