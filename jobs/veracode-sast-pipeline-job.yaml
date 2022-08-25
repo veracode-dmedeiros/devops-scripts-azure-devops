@@ -1,0 +1,39 @@
+# File: veracode-sast-pipeline-job.yml
+
+parameters:
+  - name: downloadArtifact
+    default: ""
+    type: string
+
+jobs:
+  - job: SAST_Security_Testing
+    displayName: Static Analysis Security Testing
+
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifact: ${{ parameters.downloadArtifact }}
+
+      - bash: echo 'Listing Content'
+      - bash: ls -la
+
+      - script: curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+        displayName: "Download Pipeline Scan"
+
+      - script: unzip -o pipeline-scan-LATEST.zip
+        displayName: Download Pipeline Scan
+
+      - script: java -jar pipeline-scan.jar --version
+        displayName: "Run Pipeline Scan"
+
+      - script: ls -la
+
+
+    # --veracode_api_id "$(VERACODE_API_ID)" --veracode_api_key "$(VERACODE_API_KEY)" --file "example.jar" --baseline_file "../baseline.json"
+    # VERACODE_API_ID and VERACODE_API_KEY must reference your API credentials.
+    # "--baseline_file" specifies the baseline of known flaws for the specified application file.
+    # This example command breaks the build for new flaws not listed in the specified baseline file.
+    #env:
+    #  VERACODE_API_ID: $(VERACODE_API_ID)
+    #  VERACODE_API_KEY: $(VERACODE_API_KEY)
+    #

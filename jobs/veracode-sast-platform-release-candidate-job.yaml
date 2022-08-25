@@ -1,0 +1,31 @@
+# File: veracode-sast-platform-release-candidate-job.yml
+
+parameters:
+  - name: downloadArtifact
+    default: ""
+    type: string
+
+jobs:
+  - job: SAST_Security_Testing
+    displayName: Static Analysis Security Testing
+
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifact: ${{ parameters.downloadArtifact }}
+
+      - bash: echo 'Veracode Platform SAST'
+      - bash: ls -la
+
+      - task: Veracode@3
+        inputs:
+          ConnectionDetailsSelection: "Endpoint"
+          AnalysisService: "Veracode SaaS Connection"
+          veracodeAppProfile: "$(system.teamProject)"
+          version: "$(build.buildNumber)"
+          filepath: $(Pipeline.Workspace)\WebApp.zip
+          sandboxName: "Release Candidate"
+          failBuildIfUploadAndScanBuildStepFails: true
+          importResults: true
+          failBuildOnPolicyFail: true
+          # maximumWaitTime: '360'
