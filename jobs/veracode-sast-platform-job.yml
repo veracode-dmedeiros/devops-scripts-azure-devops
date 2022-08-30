@@ -23,7 +23,7 @@ jobs:
           AnalysisService: "Veracode SaaS Connection"
           veracodeAppProfile: "$(system.teamProject)"
           version: "$(build.buildNumber)"
-          filepath: $(Pipeline.Workspace)\WebApp.zip
+          filepath: $(Pipeline.Workspace)
           #sandboxName: "Development Sandbox"
           failBuildIfUploadAndScanBuildStepFails: true
           importResults: true
