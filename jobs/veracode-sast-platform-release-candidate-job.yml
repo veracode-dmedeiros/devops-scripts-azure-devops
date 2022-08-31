@@ -19,13 +19,11 @@ jobs:
 
       - task: Veracode@3
         inputs:
-          ConnectionDetailsSelection: "Endpoint"
-          AnalysisService: "Veracode SaaS Connection"
-          veracodeAppProfile: "$(system.teamProject)"
-          version: "$(build.buildNumber)"
-          filepath: $(Pipeline.Workspace)
-          sandboxName: "Release Candidate"
-          failBuildIfUploadAndScanBuildStepFails: true
-          importResults: true
-          failBuildOnPolicyFail: true
-          # maximumWaitTime: '360'
+          ConnectionDetailsSelection: 'Endpoint'
+          AnalysisService: 'Veracode SaaS Connection'
+          veracodeAppProfile: '$(system.teamProject)'
+          version: '$(build.buildNumber)'
+          filepath: '$(Pipeline.Workspace)'
+          sandboxName: 'Release Candidate'
+          createSandBox: true
+          maximumWaitTime: '360'
