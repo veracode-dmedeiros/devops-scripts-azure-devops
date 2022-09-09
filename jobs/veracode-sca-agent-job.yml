@@ -1,0 +1,19 @@
+parameters:
+  - name: method
+    default: ""
+    type: string
+  
+jobs:
+  - job: SCA_Agent_Security_Testing
+    displayName: Software Componsition Analysis Testing
+
+    steps:
+    - checkout: none
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: ${{ parameters.downloadArtifact }}
+    - script: ls -la
+    
+    - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan --url https://github.com/srcclr/example-ruby --no-upload
+      displayName: Performing SCA Analysis
+
