@@ -17,7 +17,9 @@ jobs:
 
     steps:
     - script: echo $(Build.SourceBranchName)
+      displayName: SCA Script Branch Source
     - script: ls -la $(Build.SourcesDirectory)
+      displayName: Contents for analysis
     - ${{ if eq(parameters.quickScan, true) }}:
       - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
         displayName: Performing SCA Analysis
