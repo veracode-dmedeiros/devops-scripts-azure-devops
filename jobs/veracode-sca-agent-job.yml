@@ -1,0 +1,25 @@
+parameters:
+  - name: method
+    default: ""
+    type: string
+  - name: quickScan
+    displayName: Quick Scan
+    type: boolean
+    default: false
+  - name: uploadResults
+    displayName: Upload Results
+    type: boolean
+    default: false
+
+jobs:
+  - job: SCA_Agent_Security_Testing
+    displayName: Software Componsition Analysis Testing
+
+    steps:
+    - script: ls -la $(Build.SourcesDirectory)
+    - ${{ if eq(parameters.quickScan, true) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
+        displayName: Performing SCA Analysis
+    - ${{ if eq(parameters.quickScan, false) }}:
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload
+        displayName: Performing SCA Analysis
