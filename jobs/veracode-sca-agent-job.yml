@@ -13,7 +13,7 @@ parameters:
 
 jobs:
   - job: SCA_Agent_Security_Testing
-    displayName: Software Componsition Analysis Testing
+    displayName: Software Componsition Analysis
 
     steps:
     - script: echo $(Build.SourceBranchName)
