@@ -16,6 +16,7 @@ jobs:
     displayName: Software Componsition Analysis Testing
 
     steps:
+    - script: echo $(Build.SourceBranchName)
     - script: ls -la $(Build.SourcesDirectory)
     - ${{ if eq(parameters.quickScan, true) }}:
       - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
