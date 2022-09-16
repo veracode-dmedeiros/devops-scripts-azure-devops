@@ -17,4 +17,4 @@ File | Description
 | ---- | ----
 | [veracode-sca-agent-job.yml](./veracode-sca-agent-job.yml)                                               | A job template to perform policy software composition analysis|  
 -----
-[Back](../)
+[Back](https://github.com/dmedeiros-veracode/devops-scripts-azure-devops)
