@@ -5,10 +5,10 @@ This repository containes Azure DevOps scripts that can be referenced and used f
 The reponsitory is broken up into templates that represent reusable steps and jobs performing common tasks using Veracode tools.
 
 
-[Jobs](./jobs/Readme.md)
+[Jobs](./jobs/)
 
 
-[Steps](./steps/Readme.md)
+[Steps](./steps/)
 
 
 
