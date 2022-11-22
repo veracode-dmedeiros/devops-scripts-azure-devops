@@ -7,7 +7,7 @@ parameters:
       - true
       - false
 
- pool:
+pool:
     vmImage: ubuntu-latest
 
 jobs:
