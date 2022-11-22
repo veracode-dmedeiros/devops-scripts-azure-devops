@@ -1,11 +1,11 @@
 # DevOps Script for Azure DevOps
 
-This repository containes Azure DevOps scripts that can be referenced and used for integration with Veracode Analysis tools.
+This repository contains Azure DevOps scripts that can be referenced and used for integration with Veracode Analysis tools.
 
-The reponsitory is broken up into templates that represent reusable steps and jobs performing common tasks using Veracode tools.
+The repository is broken up into templates that represent reusable steps and jobs performing common tasks of the Veracode tool types
 
- - [Jobs](./jobs/)
- - [Steps](./steps/)
+- [Jobs](./jobs/)
+- [Steps](./steps/)
 
 
 

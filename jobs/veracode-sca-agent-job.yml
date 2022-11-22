@@ -12,7 +12,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     
-    displayName: Software Componsition Analysis Testing
+    displayName: Software Composition Analysis Testing
 
     steps:
     - script: ls -la $(Build.SourcesDirectory)
