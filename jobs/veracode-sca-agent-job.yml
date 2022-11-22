@@ -1,15 +1,11 @@
 parameters:
-  - name: method
-    default: ""
-    type: string
   - name: quickScan
     displayName: Quick Scan
     type: boolean
     default: false
-  - name: uploadResults
-    displayName: Upload Results
-    type: boolean
-    default: false
+    values: 
+      - true
+      - false
 
 jobs:
   - job: SCA_Agent_Security_Testing
@@ -18,8 +14,8 @@ jobs:
     steps:
     - script: ls -la $(Build.SourcesDirectory)
     - ${{ if eq(parameters.quickScan, true) }}:
-      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload --quick
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --quick --ws $(WORKSPACE_SLUG)
         displayName: Performing SCA Analysis
     - ${{ if eq(parameters.quickScan, false) }}:
-      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --no-upload
+      - script: curl -sSL  https://download.sourceclear.com/ci.sh | sh -s -- scan $(Build.SourcesDirectory) --ws $(WORKSPACE_SLUG)
         displayName: Performing SCA Analysis
