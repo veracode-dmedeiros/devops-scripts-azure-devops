@@ -6,11 +6,12 @@ parameters:
     values: 
       - true
       - false
-
-vmImage: ubuntu-latest
-
+      
 jobs:
   - job: SCA_Agent_Security_Testing
+    pool:
+      vmImage: 'ubuntu-latest'
+    
     displayName: Software Componsition Analysis Testing
 
     steps:
