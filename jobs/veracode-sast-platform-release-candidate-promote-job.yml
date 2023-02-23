@@ -16,19 +16,21 @@ parameters:
     default: "Release Candidate"
     type: string
 
-variables:
-  - name: ApplicationId
-  - name: SandboxId
-  - name: AnalysisId
-  - name: AnalysisName
-  - name: resultsReady
-    value: "false"
+
 
 jobs:
   - job: SAST_Release_Candidate_Promote
     displayName: SAST Release Candidate
 
-steps:
+    variables:
+      - name: ApplicationId
+      - name: SandboxId
+      - name: AnalysisId
+      - name: AnalysisName
+      - name: resultsReady
+        value: "false"
+
+  steps:
   - script: java --version
     continueOnError: true
     displayName: Report Java Version installed
