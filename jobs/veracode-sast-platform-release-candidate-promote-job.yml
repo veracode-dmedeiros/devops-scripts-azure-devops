@@ -16,19 +16,17 @@ parameters:
     default: "Release Candidate"
     type: string
 
-
-
 jobs:
   - job: SAST_Release_Candidate_Promote
-    displayName: SAST Release Candidate
+    displayName: SAST Promote Release Candidate
 
-    variables:
-      - name: ApplicationId
-      - name: SandboxId
-      - name: AnalysisId
-      - name: AnalysisName
-      - name: resultsReady
-        value: "false"
+    #variables:
+    #  - name: ApplicationId
+    #  - name: SandboxId
+    #  - name: AnalysisId
+    #  - name: AnalysisName
+    #  - name: resultsReady
+    #    value: "false"
 
   steps:
   - script: java --version
