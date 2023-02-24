@@ -20,7 +20,7 @@ jobs:
   - job: SAST_Release_Candidate_Promote
     displayName: Promotion of a Sandbox to Policy
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
       
     variables:
       - name: ApplicationId
