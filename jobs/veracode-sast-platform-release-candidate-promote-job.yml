@@ -1,26 +1,27 @@
 parameters:
   - name: veracode-api-id
-    #displayName: veracode-api-id
+    displayName: Veracode API ID
     default: ""
     type: string
   - name: veracode-api-key
-    #displayName: veracode-api-key
+    displayName: Veracode API Key
     default: ""
     type: string
   - name: applicationName
-    # displayName: "Application Name"
+    displayName: Application Name
     default: ""
     type: string
   - name: sandboxName
-    #displayName: "Sandbox Name"
+    displayName: Sandbox Name
     default: "Release Candidate"
     type: string
 
 jobs:
   - job: SAST_Release_Candidate_Promote
     displayName: Promotion of a Sandbox to Policy
-    pool:
-      vmImage: 'windows-latest'
+   
+    #pool:
+    #  vmImage: 'windows-latest'
       
     variables:
       - name: ApplicationId
