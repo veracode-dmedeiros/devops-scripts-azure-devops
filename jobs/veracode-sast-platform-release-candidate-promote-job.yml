@@ -59,7 +59,13 @@ jobs:
       enabled: false
 
     - pwsh: |
-        Write-Host 'Hello World'
-        
+        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracode-api-id }} -vkey ${{ parameters.veracode-api-key }} -action getapplist | tee applicationlist.xml
+        [xml]$Xml = Get-Content .\applicationlist.xml
+        $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/2.0/applist"}
+        $appid = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:app[@app_name='${{ parameters.applicationName }}']" | ForEach-Object {$_.Node.app_id}
+        echo $appid
+        echo "##vso[task.setvariable variable=ApplicationId]$appid"
+        echo "Application ID: $(ApplicationId)"
+        #If Blanck Report back that the application name cannot be found
       displayName: Retrieving Application ID
 
