@@ -63,7 +63,7 @@ jobs:
       enabled: false
 
     - pwsh: |
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action getapplist | tee applicationlist.xml
+        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action getapplist | Out-File -FilePath applicationlist.xml
         [xml]$Xml = Get-Content .\applicationlist.xml
         $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/2.0/applist"}
         $appid = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:app[@app_name='${{ parameters.applicationName }}']" | ForEach-Object {$_.Node.app_id}
@@ -77,7 +77,7 @@ jobs:
 
     - pwsh: |
         Write-Host "Application ID: $(ApplicationId)"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action getsandboxlist -appid $(ApplicationId) | tee sandboxlist.xml
+        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action getsandboxlist -appid $(ApplicationId) | Out-File -FilePath sandboxlist.xml
         [xml]$Xml = Get-Content .\sandboxlist.xml
         $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/4.0/sandboxlist"}
         # ${{parameters.sandboxName}}
@@ -90,7 +90,7 @@ jobs:
       
     - pwsh: |
         Write-Host "Sandbox ID: $(SandboxId)"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action GetBuildList -appid $(ApplicationId) -sandboxid $(SandboxId) | tee buildlist.xml
+        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action GetBuildList -appid $(ApplicationId) -sandboxid $(SandboxId) | Out-File -FilePath buildlist.xml
         [xml]$Xml = Get-Content .\buildlist.xml
         $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/2.0/buildlist"}
         $Build = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:build[last()]"
@@ -107,11 +107,11 @@ jobs:
       
     - pwsh: |
         Write-Host "Analysis ID: $(AnalysisId)"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action GetBuildInfo -appid $(ApplicationId) -sandboxid $(SandboxId) -buildid $(AnalysisId) | tee buildinfo.xml
+        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action GetBuildInfo -appid $(ApplicationId) -sandboxid $(SandboxId) -buildid $(AnalysisId) | Out-File -FilePath buildinfo.xml
         [xml]$Xml = Get-Content .\buildinfo.xml
         $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/4.0/buildinfo"}
         $element = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:build"
-        Write-Host $element.Node.results_ready
+      
         $results_ready = $element.Node.results_ready
         echo "Result Ready: $results_ready"
         
