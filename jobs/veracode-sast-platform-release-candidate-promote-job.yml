@@ -1,27 +1,27 @@
 parameters:
-  - name: vid
+  - name: veracode-api-id
+    default: ""
+    type: string
     displayName: Veracode API ID
-    default: ""
-    type: string
   - name: veracode-api-key
+    default: ""
+    type: string
     displayName: Veracode API Key
-    default: ""
-    type: string
   - name: applicationName
-    displayName: Application Name
     default: ""
     type: string
+    displayName: Application Name
   - name: sandboxName
-    displayName: Sandbox Name
     default: "Release Candidate"
     type: string
-
+    displayName: Sandbox Name
+    
 jobs:
   - job: SAST_Release_Candidate_Promote
     displayName: Promotion of a Sandbox to Policy
    
-    #pool:
-    #  vmImage: 'windows-latest'
+    pool:
+      vmImage: 'ubuntu-latest'
       
     variables:
       - name: ApplicationId
@@ -59,7 +59,8 @@ jobs:
       enabled: false
 
     - pwsh: |
-        echo ${{parameters.vid}}
+        echo ${{parameters.veracode-api-id}}
+        echo ${{parameters.veracode-api-key}}
         echo $appid
         echo "##vso[task.setvariable variable=ApplicationId]$appid"
         echo "Application ID: $(ApplicationId)"
