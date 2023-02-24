@@ -1,10 +1,10 @@
 
 parameters:
-  - name: veracode-api-id
+  - name: veracodeApiId
     default: ""
     type: string
 
-  - name: veracode-api-key
+  - name: veracodeApiKey
     default: ""
     type: string
 
@@ -59,8 +59,8 @@ jobs:
       enabled: false
 
     - powershell: |
-        echo ${{parameters.veracode-api-id}}
-        echo ${{parameters.veracode-api-key}}
+        echo ${{parameters.veracodeApiId}}
+        echo ${{parameters.veracodeApiKey}}
         echo $appid
         echo "##vso[task.setvariable variable=ApplicationId]$appid"
         echo "Application ID: $(ApplicationId)"
