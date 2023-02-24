@@ -36,7 +36,7 @@ jobs:
     - pwsh: |
         $versionstring = curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml | Out-String -Stream | Select-String -Pattern 'latest';
         $wrapper_version = $versionstring -replace '\s','' -replace '<latest>','' -replace '</latest>','';
-        echo $wrapper_version
+        echo "Pulling down wrapper version: $wrapper_version"
         curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/$WRAPPER_VERSION/vosp-api-wrappers-java-$WRAPPER_VERSION-dist.zip -o $(Build.ArtifactStagingDirectory)/dist.zip
         7z e $(Build.ArtifactStagingDirectory)/dist.zip -o$(Build.ArtifactStagingDirectory)/extract/ -y
       displayName: Downloading the latest version of the Veracode Java API
@@ -55,62 +55,4 @@ jobs:
       displayName: Veracode Wrapper Version
       enabled: false
 
-    - pwsh: |
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{parameters.veracode-api-id}} -vkey ${{parameters.veracode-api-key}} -action getapplist | tee applicationlist.xml
-        [xml]$Xml = Get-Content .\applicationlist.xml
-        $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/2.0/applist"}
-        $appid = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:app[@app_name='${{parameters.applicationName}}']" | ForEach-Object {$_.Node.app_id}
-        echo $appid
-        echo "##vso[task.setvariable variable=ApplicationId]$appid"
-        echo "Application ID: $(ApplicationId)"
-        #If Blanck Report back that the application name cannot be found
-      displayName: Retrieving Application ID
-
-    - pwsh: |
-        Write-Host "Application ID: $(ApplicationId)"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{parameters.veracode-api-id}} -vkey ${{parameters.veracode-api-key}} -action getsandboxlist -appid $(ApplicationId) | tee sandboxlist.xml
-        [xml]$Xml = Get-Content .\sandboxlist.xml
-        $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/4.0/sandboxlist"}
-        # ${{parameters.sandboxName}}
-        $sandbox_id = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:sandbox[@sandbox_name='${{parameters.sandboxName}}']" | ForEach-Object {$_.Node.sandbox_id}
-
-        echo "##vso[task.setvariable variable=SandboxId]$sandbox_id"
-        Write-Host "Sandbox ID: $(SandboxId)"
-      displayName: Retrieving Sandbox ID
-
-    - pwsh: |
-        Write-Host "Sandbox ID: $(SandboxId)"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{parameters.veracode-api-id}} -vkey ${{parameters.veracode-api-key}} -action GetBuildList -appid $(ApplicationId) -sandboxid $(SandboxId) | tee buildlist.xml
-
-        [xml]$Xml = Get-Content .\buildlist.xml
-        $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/2.0/buildlist"}
-        $Build = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:build[last()]"
-        $BuildId = $Build.Node.build_id
-        $Version = $Build.Node.version
-        echo "Analysis ID: $BuildId"
-        echo $Version
-        echo "##vso[task.setvariable variable=AnalysisName]$Version"
-        echo "##vso[task.setvariable variable=AnalysisId]$BuildId"
-      displayName: Retrieving Analysis List
-      
-    - pwsh: |
-        Write-Host "Analysis ID: $(AnalysisId)"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{parameters.veracode-api-id}} -vkey ${{parameters.veracode-api-key}} -action GetBuildInfo -appid $(ApplicationId) -sandboxid $(SandboxId) -buildid $(AnalysisId) | tee buildinfo.xml
-
-        [xml]$Xml = Get-Content .\buildinfo.xml
-        $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/4.0/buildinfo"}
-        $element = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:build"
-        Write-Host $element.Node.results_ready
-        $results_ready = $element.Node.results_ready
-        echo "Result Ready: $results_ready"
-        echo "##vso[task.setvariable variable=resultsReady]$results_ready"
-
-      displayName: Evaluating Scan
-      enabled: true
-      
-    - pwsh: |
-        Write-Host "Promoting: $(AnalysisName) to Policy Level"
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{parameters.veracode-api-id}} -vkey ${{parameters.veracode-api-key}} -action PromoteSandbox -buildid $(AnalysisId)
-      condition: eq(variables['resultsReady'],'true')
-      displayName: Promoting Scan
-
+ 
