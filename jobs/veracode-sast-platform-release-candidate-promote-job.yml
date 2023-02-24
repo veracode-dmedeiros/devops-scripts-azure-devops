@@ -3,19 +3,18 @@ parameters:
   - name: veracode-api-id
     default: ""
     type: string
-    displayName: Veracode API ID
+
   - name: veracode-api-key
     default: ""
     type: string
-    displayName: Veracode API Key
+
   - name: applicationName
     default: ""
     type: string
-    displayName: Application Name
+
   - name: sandboxName
     default: "Release Candidate"
     type: string
-    displayName: Sandbox Name
     
 jobs:
   - job: SAST_Release_Candidate_Promote
