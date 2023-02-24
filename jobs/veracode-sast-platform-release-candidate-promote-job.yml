@@ -1,5 +1,5 @@
 parameters:
-  - name: veracode-api-id
+  - name: vid
     displayName: Veracode API ID
     default: ""
     type: string
@@ -59,7 +59,7 @@ jobs:
       enabled: false
 
     - pwsh: |
-        echo ${{parameters.veracode-api-id}}
+        echo ${{parameters.vid}}
         echo $appid
         echo "##vso[task.setvariable variable=ApplicationId]$appid"
         echo "Application ID: $(ApplicationId)"
