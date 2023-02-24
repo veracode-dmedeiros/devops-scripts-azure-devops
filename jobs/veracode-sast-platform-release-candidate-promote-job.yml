@@ -1,12 +1,12 @@
 
 parameters:
-  - name: VeracodeApiId
-    displayName: veracode API ID
+  - name: veracodeApiId
+    displayName: Veracode API ID
     default: ""
     type: string
     
-  - name: VeracodeApiKey
-    displayName: veracode API Key
+  - name: veracodeApiKey
+    displayName: Veracode API Key
     default: ""
     type: string
     
@@ -125,3 +125,9 @@ jobs:
         java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracodeApiId }} -vkey ${{ parameters.veracodeApiKey }} -action PromoteSandbox -buildid $(AnalysisId)
       condition: eq(variables['resultsReady'],'true')
       displayName: Promoting Scan
+      
+    - pwsh: |
+        Write-Host "Conditions not ideal for promotion to Policy
+        exit 1
+      condition: eq(variables['resultsReady'],'false') 
+      displayName: Promotion Failed
