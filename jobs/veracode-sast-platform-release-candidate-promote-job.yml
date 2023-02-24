@@ -1,18 +1,22 @@
 
 parameters:
-  - name: veracodeApiId
+  - name: apiId
+    diplayName: Veracode API ID
     default: ""
     type: string
-
-  - name: veracodeApiKey
+    
+  - name: apiKey
+    displayName: Veracode API Key
     default: ""
     type: string
-
+    
   - name: applicationName
+    displayName: Application Name
     default: ""
     type: string
-
+    
   - name: sandboxName
+    displayName: Sandbox Name
     default: "Release Candidate"
     type: string
     
@@ -58,12 +62,13 @@ jobs:
       displayName: Veracode Wrapper Version
       enabled: false
 
-    - powershell: |
-        echo ${{parameters.veracodeApiId}}
-        echo ${{parameters.veracodeApiKey}}
-        echo $appid
+    - pwsh: |
+        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.apiId }} -vkey ${{ parameters.apiKey }} -action getapplist | tee applicationlist.xml
+        [xml]$Xml = Get-Content .\applicationlist.xml
+        $SnippetNamespace = @{ns = "https://analysiscenter.veracode.com/schema/2.0/applist"}
+        $appid = Select-Xml -Xml $Xml -Namespace $SnippetNamespace -XPath "//ns:app[@app_name='${{ parameters.applicationName }}']" | ForEach-Object {$_.Node.app_id}
+        echo "Application ID: $appid"
         echo "##vso[task.setvariable variable=ApplicationId]$appid"
-        echo "Application ID: $(ApplicationId)"
+
         #If Blanck Report back that the application name cannot be found
       displayName: Retrieving Application ID
-
