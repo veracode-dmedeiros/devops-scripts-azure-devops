@@ -1,7 +1,7 @@
 
 parameters:
   - name: apiId
-    diplayName: Veracode API ID
+    displayName: Veracode API ID
     default: ""
     type: string
     
