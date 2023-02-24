@@ -1,3 +1,4 @@
+
 parameters:
   - name: veracode-api-id
     default: ""
@@ -58,7 +59,7 @@ jobs:
       displayName: Veracode Wrapper Version
       enabled: false
 
-    - pwsh: |
+    - powershell: |
         echo ${{parameters.veracode-api-id}}
         echo ${{parameters.veracode-api-key}}
         echo $appid
