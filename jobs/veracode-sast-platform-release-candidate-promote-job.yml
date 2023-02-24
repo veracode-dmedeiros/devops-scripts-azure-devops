@@ -16,12 +16,12 @@ parameters:
     default: "Release Candidate"
     type: string
 
-image: ubuntu:latest
-
 jobs:
   - job: SAST_Release_Candidate_Promote
     displayName: Promotion of a Sandbox to Policy
-    
+    pool:
+      vmImage: 'ubuntu-latest'
+      
     variables:
       - name: ApplicationId
       - name: SandboxId
