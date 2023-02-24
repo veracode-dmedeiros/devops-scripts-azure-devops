@@ -18,7 +18,7 @@ parameters:
 
 jobs:
   - job: SAST_Release_Candidate_Promote
-    displayName: SAST Promote Release Candidate
+    displayName: Promotion of $(applicationName) $(sandboxName)
     
     steps:
     - script: | 
