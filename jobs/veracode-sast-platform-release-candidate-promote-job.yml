@@ -1,5 +1,3 @@
-name: 123245
-
 parameters:
   - name: veracode-api-id
     #displayName: veracode-api-id
@@ -20,7 +18,15 @@ parameters:
 
 jobs:
   - job: SAST_Release_Candidate_Promote
-    displayName: Promotion of ${applicationName} ${sandboxName}
+    displayName: Promotion of a Sandbox to Policy
+    
+    variables:
+      - name: ApplicationId
+      - name: SandboxId
+      - name: AnalysisId
+      - name: AnalysisName
+      - name: resultsReady
+        value: "false"
     
     steps:
     - script: | 
