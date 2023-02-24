@@ -59,7 +59,8 @@ jobs:
       enabled: false
 
     - pwsh: |
-        java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracode-api-id }} -vkey ${{ parameters.veracode-api-key }} -action getapplist | tee applicationlist.xml
+        Write-Host 'Hello World'
+        #java -jar $(Build.ArtifactStagingDirectory)/extract/VeracodeJavaAPI.jar -vid ${{ parameters.veracode-api-id }} -vkey ${{ parameters.veracode-api-key }} -action getapplist | tee applicationlist.xml
         
       displayName: Retrieving Application ID
 
