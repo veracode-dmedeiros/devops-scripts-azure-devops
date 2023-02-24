@@ -14,7 +14,9 @@ parameters:
 jobs:
   - job: SAST_Security_Testing
     displayName: Static Analysis Security Testing
-
+    pool:
+      vmImage: 'ubuntu-latest'
+      
     steps:
     - checkout: none
     - task: DownloadPipelineArtifact@2
